@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Psychic Cleaner Checklist | Big Blue Mop</title>
+<meta name="description" content="The Psychic Cleaner Checklist — 10 spots your cleaner should never skip. Find out if you're getting what you're paying for.">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+<!-- Favicons -->
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" href="favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="favicon-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon-192x192.png" type="image/png" sizes="192x192">
+<link rel="icon" href="favicon-512x512.png" type="image/png" sizes="512x512">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section class="cl-page">
+  <!-- Background bubbles -->
+  <div class="bubbles-bg">
+    <div class="bb bb-ring" style="width:280px;height:280px;top:-80px;right:-60px"></div>
+    <div class="bb bb-ring" style="width:180px;height:180px;bottom:100px;left:-50px"></div>
+    <div class="bb bb-dot"  style="width:14px;height:14px;top:18%;right:12%"></div>
+    <div class="bb bb-dot"  style="width:9px;height:9px;top:55%;left:6%"></div>
+    <div class="bb bb-dot"  style="width:12px;height:12px;bottom:22%;right:8%"></div>
+    <div class="bb bb-ring" style="width:100px;height:100px;bottom:60px;right:25%"></div>
+    <div class="bb bb-dot"  style="width:7px;height:7px;top:38%;right:20%"></div>
+    <div class="bb bb-glow" style="width:400px;height:400px;top:-150px;right:-150px"></div>
+    <div class="bb bb-glow" style="width:300px;height:300px;bottom:-100px;left:-100px"></div>
+  </div>
+
+  <div class="cl-page-inner">
+
+    <!-- Logo -->
+    <div class="cl-page-logo">
+      <a href="index.html">
+        <img src="logo-wordmark.png" alt="Big Blue Mop" class="cl-page-logo-img">
+      </a>
+    </div>
+    <div class="cl-tagline">We Clean Stuff</div>
+
+    <div class="cl-page-title">Psychic Cleaner Checklist</div>
+    <p class="cl-page-sub">Walk your space. Check each item. Takes 5 minutes.<br>Find out what your cleaning partner is actually delivering.</p>
+
+    <!-- Business details -->
+    <div class="cl-form-box">
+      <label>Your Business Name</label>
+      <input type="text" id="cl-bizName" placeholder="e.g. New Movement Perth">
+      <label>Your Name</label>
+      <input type="text" id="cl-contactName" placeholder="Your first name">
+      <label>Best Contact Email</label>
+      <input type="email" id="cl-contactEmail" placeholder="you@yourbusiness.com.au">
+      <label>Phone (optional)</label>
+      <input type="tel" id="cl-contactPhone" placeholder="04XX XXX XXX">
+    </div>
+
+    <p class="cl-instruction">For each item below, walk to that spot right now and check it. Be honest. <strong>Your cleaner will not see this. You will.</strong></p>
+
+    <!-- Checklist items injected by JS -->
+    <div id="cl-items"></div>
+
+    <!-- Live score bar -->
+    <div class="cl-score-bar" id="cl-scoreBar">
+      <div class="cl-score-title" id="cl-scoreTitle"></div>
+      <div class="cl-bar-track"><div class="cl-bar-fill" id="cl-barFill"></div></div>
+      <div class="cl-verdict" id="cl-verdict"></div>
+    </div>
+
+    <!-- Submit -->
+    <div class="cl-submit-wrap">
+      <button class="btn btn-primary btn-lg" id="cl-submitBtn" disabled onclick="clSubmit()">Get My Results</button>
+      <p class="cl-note">Your responses go directly to Big Blue Mop. We will never share your data.</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="cl-footer">
+      <p>Big Blue Mop | <a href="tel:0410260800">0410 260 800</a> | <a href="mailto:bigbluemop@gmail.com">bigbluemop@gmail.com</a></p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Result overlay -->
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-card">
+    <div class="result-emoji" id="resultEmoji"></div>
+    <div class="result-label" id="resultLabel"></div>
+    <p class="result-msg" id="resultMsg"></p>
+    <a class="btn btn-primary btn-lg" id="resultAction" href="tel:0410260800">Call Alex Now</a>
+    <p class="result-sub" id="resultSub"></p>
+    <button class="result-close" onclick="document.getElementById('resultOverlay').classList.remove('vis')">✕ Close</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
