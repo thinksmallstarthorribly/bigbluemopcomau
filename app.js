@@ -1,7 +1,12 @@
 /* =====================================================
    BIG BLUE MOP — APP.JS
    Handles: Nav scroll, Checklist (checklist.html), Contact form
+   =====================================================
+
+   BACKEND CONFIG — replace with your deployed Apps Script URL
+   after following setup instructions in Code.gs
    ===================================================== */
+var BBM_BACKEND = 'YOUR_APPS_SCRIPT_URL';
 
 // ===== NAV SCROLL =====
 (function () {
@@ -141,10 +146,13 @@
   }
 
   window.clSubmit = function () {
-    var biz   = (document.getElementById('cl-bizName').value   || '').trim();
-    var name  = (document.getElementById('cl-contactName').value || '').trim();
+    var biz   = (document.getElementById('cl-bizName').value    || '').trim();
+    var name  = (document.getElementById('cl-contactName').value  || '').trim();
     var email = (document.getElementById('cl-contactEmail').value || '').trim();
     var phone = (document.getElementById('cl-contactPhone').value || '').trim();
+
+    if (!biz)   { alert('Please enter your business name.'); return; }
+    if (!name)  { alert('Please enter your name.'); return; }
     if (!email) { alert('Please enter your email so we can send your results.'); return; }
 
     var s   = calcScore();
@@ -152,54 +160,70 @@
     btn.disabled    = true;
     btn.textContent = 'Submitting...';
 
-    var payload = { bizName:biz, contactName:name, email:email, phone:phone,
-                    score:s.pct, fails:s.fails, unsures:s.unsures, tier:s.tier, answers:answers };
+    var payload = {
+      bizName:     biz,
+      contactName: name,
+      email:       email,
+      phone:       phone,
+      score:       s.pct,
+      fails:       s.fails,
+      unsures:     s.unsures,
+      tier:        s.tier,
+      answers:     answers
+    };
 
-    // =====================================================
-    // REPLACE THIS URL WITH YOUR DEPLOYED APPS SCRIPT URL
-    // =====================================================
-    var BACKEND = 'YOUR_APPS_SCRIPT_URL';
-
-    if (BACKEND === 'YOUR_APPS_SCRIPT_URL') {
-      showResults(s.pct, s.fails, s.tier, biz, email);
+    // If backend not yet configured — show results immediately (demo mode)
+    if (!BBM_BACKEND || BBM_BACKEND === 'YOUR_APPS_SCRIPT_URL') {
+      showResults(s.pct, s.fails, s.tier, biz, name);
       return;
     }
 
-    fetch(BACKEND, { method:'POST', mode:'no-cors',
-                     headers:{'Content-Type':'application/json'},
-                     body:JSON.stringify(payload) })
-      .then(function () { showResults(s.pct, s.fails, s.tier, biz, email); })
-      .catch(function () { showResults(s.pct, s.fails, s.tier, biz, email); });
+    // POST to Google Apps Script backend
+    fetch(BBM_BACKEND, {
+      method:  'POST',
+      mode:    'no-cors',          // Apps Script requires no-cors
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    })
+    .then(function () {
+      showResults(s.pct, s.fails, s.tier, biz, name);
+    })
+    .catch(function () {
+      // Show results even if network fails — data may have still been received
+      showResults(s.pct, s.fails, s.tier, biz, name);
+    });
   };
 
-  function showResults(pct, fails, tier, biz) {
+  function showResults(pct, fails, tier, biz, name) {
     document.getElementById('cl-submitBtn').textContent = 'Submitted ✓';
     var ov = document.getElementById('resultOverlay');
     ov.classList.add('vis');
     var em, lb, msg, ac, sub;
+    var firstName = name ? name.split(' ')[0] : '';
     if (tier === 'HOT') {
       em='🔴'; lb='Critical Issues Found';
       document.getElementById('resultLabel').style.color = '#E74C3C';
-      msg = 'Your space scored <strong>' + pct + '%</strong> with <strong>' + fails + ' areas failing.</strong> This is the kind of result that drives reviews. We have your results and Alex will be in touch today.';
-      ac  = 'Call Alex Now'; document.getElementById('resultAction').href = 'tel:0410260800';
-      sub = 'Your results have been submitted. Expect a call within 24 hours.';
+      msg = (firstName ? 'Hi ' + firstName + '. ' : '') + 'Your space scored <strong>' + pct + '%</strong> with <strong>' + fails + ' areas failing.</strong> These are the kind of results that show up in Google reviews. Alex has your results and will be in touch today.';
+      ac  = 'Call Alex Now';
+      document.getElementById('resultAction').href = 'tel:0410260800';
+      sub = 'Check your inbox — your full results have been emailed to you.';
     } else if (tier === 'WARM') {
       em='🟡'; lb='Gaps Detected';
       document.getElementById('resultLabel').style.color = '#F39C12';
-      msg = 'Your space scored <strong>' + pct + '%</strong>. Not a disaster, but <strong>' + fails + ' areas need attention.</strong> These gaps build up quietly and eventually show up in reviews.';
+      msg = (firstName ? 'Hi ' + firstName + '. ' : '') + 'Your space scored <strong>' + pct + '%</strong>. Not a disaster, but <strong>' + fails + ' areas need attention.</strong> These gaps build up quietly and eventually show up in reviews.';
       ac  = 'Book a Free Walkthrough';
-      document.getElementById('resultAction').href = 'mailto:bigbluemop@gmail.com?subject=' + encodeURIComponent('Free Walkthrough Request - ' + biz);
-      sub = 'Your results have been submitted. We will follow up within 48 hours.';
+      document.getElementById('resultAction').href = 'mailto:bigbluemop@gmail.com?subject=' + encodeURIComponent('Free Walkthrough Request — ' + biz);
+      sub = 'Check your inbox — your full results have been emailed to you.';
     } else {
       em='🟢'; lb='Looking Good';
       document.getElementById('resultLabel').style.color = '#27ae60';
-      msg = 'Your space scored <strong>' + pct + '%</strong>. Your cleaning team is covering the bases. Run this again in 30 days to keep them honest.';
+      msg = (firstName ? 'Hi ' + firstName + '. ' : '') + 'Your space scored <strong>' + pct + '%</strong>. Your cleaning team is covering the bases. Run this again in 30 days to keep them honest.';
       ac  = 'Done';
       document.getElementById('resultAction').href = '#';
       document.getElementById('resultAction').onclick = function (e) {
         e.preventDefault(); ov.classList.remove('vis');
       };
-      sub = 'Standards slip when nobody is watching. Keep this checklist handy.';
+      sub = 'Check your inbox — your results have been emailed to you.';
     }
     document.getElementById('resultEmoji').textContent  = em;
     document.getElementById('resultLabel').textContent  = lb;
