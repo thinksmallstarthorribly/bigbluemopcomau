@@ -6,7 +6,7 @@
    BACKEND CONFIG — replace with your deployed Apps Script URL
    after following setup instructions in Code.gs
    ===================================================== */
-var BBM_BACKEND = 'https://script.google.com/macros/s/AKfycby6YUpOyr-ztBUrFaVynFwiVoYRGXvip7r9y5eKQl9-djHeK-wXxkQm8HennV33DSc8/exec';
+var BBM_BACKEND = 'https://script.google.com/macros/s/AKfycbywW8hzVTXyujtyCPfqjhZ6I3u_6tVRGihtvQ6CRO6E69dv4RZVXMsLIN3QjWmfj7hfig/exec';
 
 // ===== NAV SCROLL =====
 (function () {
