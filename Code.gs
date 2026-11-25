@@ -1,4 +1,10 @@
 /**
+ * Historical copy only (noted 25 Nov 2026).
+ * This file does NOT match the deployed Apps Script.
+ * The deployed version is newer.
+ */
+
+/**
  * BIG BLUE MOP — Google Apps Script Backend
  * ==========================================
  * Handles Psychic Cleaner Checklist submissions from bigbluemop.com.au/checklist.html
